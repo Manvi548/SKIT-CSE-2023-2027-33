@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EmotionAI - UI Prototype</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+  <div class="logo">EmotionAI</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#analyze">Analyze</a>
+    <a href="#about">About</a>
+  </nav>
+</header>
+
+<section id="home" class="hero">
+  <div class="hero-content">
+    <p class="small-heading">MULTIMODAL EMOTION RECOGNITION</p>
+    <h1>Understand emotions <span>through technology.</span></h1>
+    <p class="description">
+      A simple UI/UX prototype for detecting human emotions from
+      text, images and videos.
+    </p>
+    <a href="#analyze" class="main-button">Start Analysis</a>
+  </div>
+</section>
+
+<section id="analyze" class="analyze-section">
+  <div class="section-title">
+    <p class="small-heading">CHOOSE INPUT</p>
+    <h2>Select an Input Modality</h2>
+    <p>Hover over a card to explore the available input types.</p>
+  </div>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-icon">T</div>
+      <h3>Text</h3>
+      <p>Analyze emotions from written text.</p>
+      <div class="hover-content">
+        <span>✓ Text input</span>
+        <span>✓ Emotion analysis</span>
+        <button onclick="selectInput('Text')">Select Text</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">I</div>
+      <h3>Image</h3>
+      <p>Upload an image for emotion recognition.</p>
+      <div class="hover-content">
+        <span>✓ Image upload</span>
+        <span>✓ Facial emotion analysis</span>
+        <button onclick="selectInput('Image')">Select Image</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">V</div>
+      <h3>Video</h3>
+      <p>Upload a video for future emotion analysis.</p>
+      <div class="hover-content">
+        <span>✓ Video upload</span>
+        <span>✓ Frame-based analysis</span>
+        <button onclick="selectInput('Video')">Select Video</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="message" class="message">
+    Hover over a card and select an input modality.
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <p class="small-heading">ABOUT THE PROJECT</p>
+  <h2>Multimodal Emotion Recognition System</h2>
+  <p>
+    First UI/UX prototype for the SKIT CSE final-year project.
+    This phase focuses on interface design and user interaction.
+    Machine learning and backend integration will be added later.
+  </p>
+</section>
+
+<footer>
+  <p>SKIT CSE 2023–2027 | Batch 33</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
