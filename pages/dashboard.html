@@ -1,0 +1,46 @@
+function setEmotionComponent(emotion, confidence, emoji) {
+
+    const emotionElement =
+        document.getElementById("componentEmotion");
+
+    const confidenceElement =
+        document.getElementById("componentConfidence");
+
+    const emojiElement =
+        document.getElementById("componentEmoji");
+
+    const confidenceBar =
+        document.getElementById("componentConfidenceBar");
+
+    if (emotionElement)
+        emotionElement.textContent = emotion;
+
+    if (confidenceElement)
+        confidenceElement.textContent = `${confidence}%`;
+
+    if (emojiElement)
+        emojiElement.textContent = emoji;
+
+    if (confidenceBar)
+        confidenceBar.style.width = `${confidence}%`;
+}
+
+
+function showComponent(id) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element)
+        element.style.display = "block";
+}
+
+
+function hideComponent(id) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element)
+        element.style.display = "none";
+}
