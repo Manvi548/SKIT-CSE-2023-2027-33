@@ -1,0 +1,1025 @@
+<title>EmotionSense AI | Emotion Detection</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; font-family: Inter, Arial, sans-serif; }
+:root {
+--bg: #080b14;
+--card: #111625;
+--card2: #171d2e;
+--border: rgba(255,255,255,0.08);
+--text: #f5f7ff;
+--muted: #8d96ad;
+--primary: #7c5cff;
+--secondary: #00d4ff;
+--success: #35d07f;
+--danger: #ff5d73;
+--warning: #ffbd4a;
+}
+
+body {
+background: var(--bg);
+color: var(--text);
+min-height: 100vh;
+overflow-x: hidden;
+}
+
+body:before {
+content: "";
+position: fixed;
+width: 500px;
+height: 500px;
+background: rgba(124,92,255,0.12);
+filter: blur(120px);
+top: -150px;
+left: -150px;
+z-index: -1;
+}
+
+body:after {
+content: "";
+position: fixed;
+width: 400px;
+height: 400px;
+background: rgba(0,212,255,0.08);
+filter: blur(120px);
+bottom: -100px;
+right: -100px;
+z-index: -1;
+}
+
+.container {
+width: 92%;
+max-width: 1400px;
+margin: auto;
+}
+
+header {
+height: 80px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+border-bottom: 1px solid var(--border);
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 21px;
+font-weight: 800;
+}
+
+.logo-icon {
+width: 40px;
+height: 40px;
+border-radius: 12px;
+background: linear-gradient(135deg, var(--primary), var(--secondary));
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 21px;
+}
+
+nav {
+display: flex;
+gap: 28px;
+}
+
+nav a {
+color: var(--muted);
+text-decoration: none;
+font-size: 14px;
+transition: 0.3s;
+}
+
+nav a:hover,
+nav a.active {
+color: white;
+}
+
+.status {
+display: flex;
+align-items: center;
+gap: 8px;
+color: #a8b2c8;
+font-size: 13px;
+}
+
+.status-dot {
+width: 8px;
+height: 8px;
+border-radius: 50%;
+background: var(--success);
+box-shadow: 0 0 12px var(--success);
+}
+
+.hero {
+padding: 55px 0 35px;
+}
+
+.hero-content {
+max-width: 800px;
+}
+
+.tag {
+display: inline-flex;
+align-items: center;
+gap: 7px;
+padding: 8px 14px;
+border: 1px solid rgba(124,92,255,0.3);
+border-radius: 50px;
+background: rgba(124,92,255,0.08);
+color: #b9adff;
+font-size: 12px;
+margin-bottom: 18px;
+}
+
+.hero h1 {
+font-size: clamp(38px, 6vw, 68px);
+line-height: 1;
+letter-spacing: -3px;
+margin-bottom: 20px;
+}
+
+.gradient {
+background: linear-gradient(90deg, #9b87ff, #55dcff);
+-webkit-background-clip: text;
+color: transparent;
+}
+
+.hero p {
+color: var(--muted);
+line-height: 1.7;
+font-size: 16px;
+max-width: 680px;
+}
+
+.dashboard {
+display: grid;
+grid-template-columns: 1.5fr 1fr;
+gap: 22px;
+margin-top: 20px;
+}
+
+.card {
+background: linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015));
+border: 1px solid var(--border);
+border-radius: 22px;
+padding: 24px;
+backdrop-filter: blur(20px);
+}
+
+.card-title {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 20px;
+}
+
+.card-title h2 {
+font-size: 17px;
+}
+
+.card-title span {
+font-size: 12px;
+color: var(--muted);
+}
+
+.camera-area {
+height: 430px;
+border-radius: 17px;
+overflow: hidden;
+background: #05070d;
+position: relative;
+display: flex;
+align-items: center;
+justify-content: center;
+border: 1px solid var(--border);
+}
+
+video {
+width: 100%;
+height: 100%;
+object-fit: cover;
+display: none;
+}
+
+.camera-placeholder {
+text-align: center;
+color: var(--muted);
+}
+
+.camera-icon {
+width: 70px;
+height: 70px;
+border-radius: 20px;
+margin: auto auto 15px;
+background: rgba(124,92,255,0.12);
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 30px;
+}
+
+.camera-controls {
+display: flex;
+gap: 12px;
+margin-top: 17px;
+}
+
+button {
+border: none;
+cursor: pointer;
+color: white;
+transition: 0.25s;
+}
+
+.primary-btn {
+flex: 1;
+padding: 14px 20px;
+border-radius: 12px;
+background: linear-gradient(135deg, var(--primary), #5d7cff);
+font-weight: 700;
+}
+
+.primary-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 30px rgba(124,92,255,0.25);
+}
+
+.secondary-btn {
+padding: 14px 20px;
+border-radius: 12px;
+background: rgba(255,255,255,0.06);
+border: 1px solid var(--border);
+}
+
+.secondary-btn:hover {
+background: rgba(255,255,255,0.1);
+}
+
+.emotion-main {
+text-align: center;
+padding: 15px 0 28px;
+}
+
+.emotion-face {
+width: 120px;
+height: 120px;
+margin: 5px auto 15px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 68px;
+background: rgba(255,189,74,0.1);
+border: 1px solid rgba(255,189,74,0.25);
+box-shadow: 0 0 50px rgba(255,189,74,0.08);
+}
+
+.detected-label {
+color: var(--muted);
+font-size: 12px;
+margin-bottom: 5px;
+}
+
+.detected-emotion {
+font-size: 32px;
+font-weight: 800;
+}
+
+.confidence {
+margin-top: 7px;
+color: var(--success);
+font-size: 13px;
+}
+
+.emotion-list {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+.emotion-row {
+display: grid;
+grid-template-columns: 80px 1fr 45px;
+align-items: center;
+gap: 12px;
+}
+
+.emotion-row label {
+font-size: 13px;
+color: #bbc3d4;
+}
+
+.bar {
+height: 7px;
+border-radius: 10px;
+background: rgba(255,255,255,0.06);
+overflow: hidden;
+}
+
+.fill {
+height: 100%;
+border-radius: 10px;
+transition: width 0.7s ease;
+background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.percent {
+font-size: 12px;
+color: var(--muted);
+text-align: right;
+}
+
+.stats {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 18px;
+margin: 22px 0;
+}
+
+.stat {
+padding: 22px;
+border-radius: 18px;
+background: rgba(255,255,255,0.035);
+border: 1px solid var(--border);
+}
+
+.stat-top {
+display: flex;
+justify-content: space-between;
+color: var(--muted);
+font-size: 12px;
+}
+
+.stat-icon {
+font-size: 20px;
+}
+
+.stat-number {
+font-size: 30px;
+font-weight: 800;
+margin-top: 13px;
+}
+
+.stat-change {
+margin-top: 5px;
+color: var(--success);
+font-size: 11px;
+}
+
+.section {
+margin: 50px 0;
+}
+
+.section-heading {
+margin-bottom: 22px;
+}
+
+.section-heading h2 {
+font-size: 28px;
+margin-bottom: 8px;
+}
+
+.section-heading p {
+color: var(--muted);
+font-size: 14px;
+}
+
+.progress-grid {
+display: grid;
+grid-template-columns: 1.2fr 1fr;
+gap: 22px;
+}
+
+.week-list {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.week {
+display: grid;
+grid-template-columns: 55px 1fr 80px;
+align-items: center;
+gap: 15px;
+padding: 15px;
+background: rgba(255,255,255,0.025);
+border: 1px solid var(--border);
+border-radius: 14px;
+}
+
+.week-number {
+width: 42px;
+height: 42px;
+border-radius: 12px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: rgba(124,92,255,0.12);
+color: #bdb2ff;
+font-size: 12px;
+font-weight: 700;
+}
+
+.week h3 {
+font-size: 14px;
+margin-bottom: 5px;
+}
+
+.week p {
+font-size: 11px;
+color: var(--muted);
+}
+
+.week-progress {
+text-align: right;
+}
+
+.week-progress strong {
+font-size: 13px;
+}
+
+.mini-bar {
+height: 5px;
+margin-top: 6px;
+border-radius: 10px;
+background: rgba(255,255,255,0.06);
+overflow: hidden;
+}
+
+.mini-fill {
+height: 100%;
+background: linear-gradient(90deg, var(--primary), var(--secondary));
+border-radius: 10px;
+}
+
+.chart {
+height: 330px;
+display: flex;
+align-items: end;
+justify-content: space-around;
+padding: 20px 5px 10px;
+gap: 10px;
+}
+
+.chart-column {
+height: 100%;
+flex: 1;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: end;
+gap: 10px;
+}
+
+.chart-bar {
+width: 70%;
+max-width: 50px;
+border-radius: 10px 10px 4px 4px;
+background: linear-gradient(180deg, var(--secondary), var(--primary));
+min-height: 10px;
+animation: grow 1s ease forwards;
+}
+
+.chart-column span {
+font-size: 11px;
+color: var(--muted);
+}
+
+@Keyframes grow {
+from {
+height: 0;
+}
+}
+
+.features {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 18px;
+}
+
+.feature {
+padding: 25px;
+border-radius: 18px;
+background: rgba(255,255,255,0.025);
+border: 1px solid var(--border);
+}
+
+.feature-icon {
+width: 48px;
+height: 48px;
+border-radius: 14px;
+background: rgba(124,92,255,0.12);
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 22px;
+margin-bottom: 18px;
+}
+
+.feature h3 {
+font-size: 16px;
+margin-bottom: 8px;
+}
+
+.feature p {
+color: var(--muted);
+font-size: 13px;
+line-height: 1.6;
+}
+
+.history {
+overflow-x: auto;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+min-width: 650px;
+}
+
+th {
+text-align: left;
+padding: 13px;
+color: var(--muted);
+font-size: 11px;
+font-weight: 500;
+border-bottom: 1px solid var(--border);
+}
+
+td {
+padding: 15px 13px;
+font-size: 13px;
+border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.emotion-badge {
+display: inline-flex;
+align-items: center;
+gap: 6px;
+padding: 6px 10px;
+border-radius: 20px;
+background: rgba(53,208,127,0.08);
+color: #6ee8a2;
+font-size: 11px;
+}
+
+.about {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 22px;
+}
+
+.about-text {
+color: var(--muted);
+line-height: 1.8;
+font-size: 14px;
+}
+
+.tech-stack {
+display: flex;
+flex-wrap: wrap;
+gap: 9px;
+margin-top: 18px;
+}
+
+.tech {
+padding: 8px 12px;
+border-radius: 9px;
+background: rgba(255,255,255,0.05);
+border: 1px solid var(--border);
+font-size: 11px;
+color: #cbd2e2;
+}
+
+footer {
+margin-top: 70px;
+border-top: 1px solid var(--border);
+padding: 30px 0;
+color: var(--muted);
+font-size: 12px;
+}
+
+.footer-content {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.modal {
+position: fixed;
+inset: 0;
+background: rgba(0,0,0,0.75);
+backdrop-filter: blur(8px);
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 20;
+}
+
+.modal-box {
+width: 90%;
+max-width: 500px;
+background: #111625;
+border: 1px solid var(--border);
+border-radius: 20px;
+padding: 28px;
+}
+
+.modal-box h2 {
+margin-bottom: 10px;
+}
+
+.modal-box p {
+color: var(--muted);
+line-height: 1.6;
+font-size: 13px;
+}
+
+.modal-buttons {
+display: flex;
+gap: 10px;
+margin-top: 25px;
+}
+
+.loader {
+width: 35px;
+height: 35px;
+border: 3px solid rgba(255,255,255,0.1);
+border-top-color: var(--secondary);
+border-radius: 50%;
+animation: spin 0.8s linear infinite;
+margin: auto;
+}
+
+@Keyframes spin {
+to {
+transform: rotate(360deg);
+}
+}
+
+.scanning {
+position: absolute;
+width: 100%;
+height: 3px;
+background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+top: 0;
+display: none;
+animation: scan 2s linear infinite;
+box-shadow: 0 0 20px #00d4ff;
+}
+
+@Keyframes scan {
+0% {
+top: 0;
+}
+100% {
+top: 100%;
+}
+}
+
+.detected-overlay {
+position: absolute;
+bottom: 15px;
+left: 15px;
+right: 15px;
+padding: 14px;
+border-radius: 13px;
+background: rgba(5,7,13,0.75);
+backdrop-filter: blur(12px);
+display: none;
+justify-content: space-between;
+align-items: center;
+}
+
+.detected-overlay strong {
+font-size: 17px;
+}
+
+@media(max-width: 1000px) {
+.dashboard,
+.progress-grid,
+.about {
+grid-template-columns: 1fr;
+}
+
+.stats {
+    grid-template-columns: repeat(2, 1fr);
+}
+}
+
+@media(max-width: 700px) {
+nav {
+display: none;
+}
+
+.hero {
+    padding-top: 35px;
+}
+
+.hero h1 {
+    letter-spacing: -2px;
+}
+
+.camera-area {
+    height: 330px;
+}
+
+.features {
+    grid-template-columns: 1fr;
+}
+
+.stats {
+    grid-template-columns: 1fr 1fr;
+}
+
+.week {
+    grid-template-columns: 45px 1fr;
+}
+
+.week-progress {
+    display: none;
+}
+
+.footer-content {
+    flex-direction: column;
+    gap: 10px;
+}
+}
+</style>
+
+😊
+EmotionSense AI
+<nav>
+    <a href="#dashboard" class="active">Dashboard</a>
+    <a href="#progress">Progress</a>
+    <a href="#features">Features</a>
+    <a href="#history">History</a>
+</nav>
+
+<div class="status">
+    <span class="status-dot"></span>
+    System Online
+</div>
+✦ AI Powered Emotion Recognition
+Understand emotions with Artificial Intelligence.
+EmotionSense is a computer vision based emotion detection platform designed to analyze facial expressions and identify emotional states using modern artificial intelligence techniques.
+
+<div class="card">
+    <div class="card-title">
+        <h2>Live Emotion Detection</h2>
+        <span>Camera Input</span>
+    </div>
+
+    <div class="camera-area">
+        <video id="video" autoplay playsinline></video>
+
+        <div class="camera-placeholder" id="placeholder">
+            <div class="camera-icon">📷</div>
+            <h3>Camera Ready</h3>
+            <p>Start camera to begin detection</p>
+        </div>
+
+        <div class="scanning" id="scanner"></div>
+
+        <div class="detected-overlay" id="overlay">
+            <div>
+                <small style="color:#8d96ad">Detected Emotion</small>
+                <br>
+                <strong id="overlayEmotion">Happy 😊</strong>
+            </div>
+            <strong id="overlayConfidence">94%</strong>
+        </div>
+    </div>
+
+    <div class="camera-controls">
+        <button class="primary-btn" id="cameraBtn" onclick="toggleCamera()">Start Camera</button>
+        <button class="secondary-btn" onclick="simulateDetection()">Analyze</button>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-title">
+        <h2>Current Analysis</h2>
+        <span>AI Result</span>
+    </div>
+
+    <div class="emotion-main">
+        <div class="emotion-face" id="mainFace">😊</div>
+        <div class="detected-label">Dominant Emotion</div>
+        <div class="detected-emotion" id="mainEmotion">Happy</div>
+        <div class="confidence" id="mainConfidence">Confidence: 94.2%</div>
+    </div>
+
+    <div class="emotion-list">
+
+        <div class="emotion-row">
+            <label>Happy</label>
+            <div class="bar"><div class="fill" id="happyBar" style="width:94%"></div></div>
+            <div class="percent" id="happyValue">94%</div>
+        </div>
+
+        <div class="emotion-row">
+            <label>Neutral</label>
+            <div class="bar"><div class="fill" id="neutralBar" style="width:42%"></div></div>
+            <div class="percent" id="neutralValue">42%</div>
+        </div>
+
+        <div class="emotion-row">
+            <label>Sad</label>
+            <div class="bar"><div class="fill" id="sadBar" style="width:18%"></div></div>
+            <div class="percent" id="sadValue">18%</div>
+        </div>
+
+        <div class="emotion-row">
+            <label>Angry</label>
+            <div class="bar"><div class="fill" id="angryBar" style="width:9%"></div></div>
+            <div class="percent" id="angryValue">9%</div>
+        </div>
+
+        <div class="emotion-row">
+            <label>Surprise</label>
+            <div class="bar"><div class="fill" id="surpriseBar" style="width:25%"></div></div>
+            <div class="percent" id="surpriseValue">25%</div>
+        </div>
+
+        <div class="emotion-row">
+            <label>Fear</label>
+            <div class="bar"><div class="fill" id="fearBar" style="width:7%"></div></div>
+            <div class="percent" id="fearValue">7%</div>
+        </div>
+
+    </div>
+</div>
+<div class="stat">
+    <div class="stat-top">
+        <span>Analyses</span>
+        <span class="stat-icon">🔍</span>
+    </div>
+    <div class="stat-number" id="analysisCount">128</div>
+    <div class="stat-change">+18 this week</div>
+</div>
+
+<div class="stat">
+    <div class="stat-top">
+        <span>Accuracy</span>
+        <span class="stat-icon">🎯</span>
+    </div>
+    <div class="stat-number">92.8%</div>
+    <div class="stat-change">+2.4% improvement</div>
+</div>
+
+<div class="stat">
+    <div class="stat-top">
+        <span>Response</span>
+        <span class="stat-icon">⚡</span>
+    </div>
+    <div class="stat-number">184ms</div>
+    <div class="stat-change">Real-time processing</div>
+</div>
+
+<div class="stat">
+    <div class="stat-top">
+        <span>Emotions</span>
+        <span class="stat-icon">🧠</span>
+    </div>
+    <div class="stat-number">7</div>
+    <div class="stat-change">Classification classes</div>
+</div>
+<div class="section-heading">
+    <h2>Weekly Project Progress</h2>
+    <p>Development milestones completed throughout the project.</p>
+</div>
+
+<div class="progress-grid">
+
+    <div class="card">
+        <div class="card-title">
+            <h2>Development Timeline</h2>
+            <span>8 Weeks</span>
+        </div>
+
+        <div class="week-list">
+
+            <div class="week">
+                <div class="week-number">01</div>
+                <div>
+                    <h3>Project Research</h3>
+                    <p>Problem identification and requirement analysis</p>
+                </div>
+                <div class="week-progress">
+                    <strong>100%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">02</div>
+                <div>
+                    <h3>Dataset Collection</h3>
+                    <p>Facial expression dataset research and preparation</p>
+                </div>
+                <div class="week-progress">
+                    <strong>100%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">03</div>
+                <div>
+                    <h3>Data Preprocessing</h3>
+                    <p>Image resizing, normalization and dataset cleaning</p>
+                </div>
+                <div class="week-progress">
+                    <strong>100%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">04</div>
+                <div>
+                    <h3>Model Development</h3>
+                    <p>Initial machine learning model implementation</p>
+                </div>
+                <div class="week-progress">
+                    <strong>90%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:90%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">05</div>
+                <div>
+                    <h3>Model Training</h3>
+                    <p>Training and evaluation of emotion classifier</p>
+                </div>
+                <div class="week-progress">
+                    <strong>82%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:82%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">06</div>
+                <div>
+                    <h3>Web Integration</h3>
+                    <p>Connecting detection system with web interface</p>
+                </div>
+                <div class="week-progress">
+                    <strong>70%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:70%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">07</div>
+                <div>
+                    <h3>Testing</h3>
+                    <p>Performance testing and accuracy improvements</p>
+                </div>
+                <div class="week-progress">
+                    <strong>55%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:55%"></div></div>
+                </div>
+            </div>
+
+            <div class="week">
+                <div class="week-number">08</div>
+                <div>
+                    <h3>Final Deployment</h3>
+                    <p>Documentation, presentation and final deployment</p>
+                </div>
+                <div class="week-progress">
+                    <strong>35%</strong>
+                    <div class="mini-bar"><div class="mini-fill" style="width:35%"></div></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>Detection Performance</h2>
+            <span>Weekly Accuracy</span>
+        </div>
+
+        <div class="chart">
+
+            <div class="chart-column">
+                <div class="chart-bar" style="height:45%"></div>
+                <span>W1</span>
+            </div>
+
+            <div class="chart-column">
+                <div class="chart-bar" style="height:52%"></div>
+                <span>W2</span>
+            </div>
+
+            <div class="chart-column">
+                <div class="chart-bar" style="height:60%"></div>
+                <span>W3</span>
+            </div>
+
+        
