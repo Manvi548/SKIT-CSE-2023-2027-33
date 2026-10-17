@@ -1,0 +1,1181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EmotionSense AI | Emotion Detection</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Inter, Arial, sans-serif;
+}
+
+:root {
+    --bg: #080b14;
+    --card: #111625;
+    --border: rgba(255,255,255,0.08);
+    --text: #f5f7ff;
+    --muted: #8d96ad;
+    --primary: #7c5cff;
+    --secondary: #00d4ff;
+    --success: #35d07f;
+    --danger: #ff5d73;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.container {
+    width: 92%;
+    max-width: 1400px;
+    margin: auto;
+}
+
+header {
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+}
+
+nav {
+    display: flex;
+    gap: 25px;
+}
+
+nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+nav a:hover {
+    color: white;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--danger);
+}
+
+.hero {
+    padding: 55px 0 35px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 8px 14px;
+    border: 1px solid rgba(124,92,255,.3);
+    border-radius: 50px;
+    background: rgba(124,92,255,.08);
+    color: #b9adff;
+    font-size: 12px;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size: clamp(36px, 5vw, 65px);
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 20px;
+}
+
+.gradient {
+    background: linear-gradient(90deg, #9b87ff, #55dcff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    color: var(--muted);
+    line-height: 1.8;
+    font-size: 15px;
+    max-width: 700px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 22px;
+    margin-top: 20px;
+}
+
+.card {
+    background: linear-gradient(
+        145deg,
+        rgba(255,255,255,.045),
+        rgba(255,255,255,.015)
+    );
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 24px;
+    min-width: 0;
+}
+
+.card-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.card-title h2 {
+    font-size: 17px;
+}
+
+.card-title span {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.input-panel {
+    background: rgba(124,92,255,.06);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 16px;
+}
+
+.input-panel p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    margin-bottom: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 145px;
+    padding: 14px;
+    border-radius: 12px;
+    background: #0b0f1b;
+    color: white;
+    border: 1px solid #33394d;
+    resize: vertical;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+textarea:focus {
+    outline: 1px solid var(--secondary);
+    border-color: var(--secondary);
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    color: white;
+    transition: .25s;
+}
+
+.primary-btn,
+.secondary-btn {
+    padding: 13px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.primary-btn {
+    background: linear-gradient(135deg, var(--primary), #5d7cff);
+}
+
+.primary-btn:hover {
+    transform: translateY(-2px);
+}
+
+.primary-btn:disabled {
+    opacity: .6;
+    cursor: wait;
+    transform: none;
+}
+
+.secondary-btn {
+    background: rgba(255,255,255,.06);
+    border: 1px solid var(--border);
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 13px;
+}
+
+.actions .primary-btn {
+    flex: 1;
+}
+
+#requestStatus {
+    min-height: 36px;
+    margin-top: 15px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+#requestStatus.success {
+    color: var(--success);
+}
+
+#requestStatus.error {
+    color: #ff8b9b;
+}
+
+.emotion-main {
+    text-align: center;
+    padding: 12px 0 28px;
+}
+
+.emotion-face {
+    width: 115px;
+    height: 115px;
+    margin: 5px auto 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    background: rgba(124,92,255,.12);
+    border: 1px solid rgba(124,92,255,.25);
+}
+
+.detected-label {
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.detected-emotion {
+    font-size: 32px;
+    font-weight: 800;
+    overflow-wrap: anywhere;
+}
+
+.confidence {
+    margin-top: 8px;
+    color: var(--success);
+    font-size: 13px;
+}
+
+.emotion-list {
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+}
+
+.emotion-row {
+    display: grid;
+    grid-template-columns: 85px 1fr 48px;
+    align-items: center;
+    gap: 12px;
+}
+
+.emotion-row label {
+    font-size: 13px;
+    color: #bbc3d4;
+    margin: 0;
+}
+
+.bar {
+    height: 7px;
+    border-radius: 10px;
+    background: rgba(255,255,255,.07);
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    transition: width .5s ease;
+}
+
+.percent {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin: 22px 0 45px;
+}
+
+.stat {
+    padding: 22px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid var(--border);
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stat-icon {
+    font-size: 20px;
+}
+
+.stat-number {
+    font-size: 26px;
+    font-weight: 800;
+    margin-top: 13px;
+}
+
+.stat-change {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.section {
+    margin: 45px 0;
+}
+
+.section-heading {
+    margin-bottom: 22px;
+}
+
+.section-heading h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.feature {
+    padding: 24px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.025);
+    border: 1px solid var(--border);
+}
+
+.feature-icon {
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.feature h3 {
+    font-size: 16px;
+    margin-bottom: 9px;
+}
+
+.feature p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.history {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 550px;
+}
+
+th {
+    text-align: left;
+    padding: 14px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+}
+
+td {
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255,255,255,.05);
+    overflow-wrap: anywhere;
+}
+
+.emotion-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    background: rgba(53,208,127,.08);
+    color: #6ee8a2;
+    font-size: 11px;
+}
+
+footer {
+    margin-top: 60px;
+    border-top: 1px solid var(--border);
+    padding: 25px 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+@media(max-width: 1000px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 700px) {
+    header {
+        padding: 15px 0;
+        flex-wrap: wrap;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .hero {
+        padding-top: 35px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .emotion-row {
+        grid-template-columns: 68px 1fr 42px;
+        gap: 8px;
+    }
+
+    .footer-content {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">😊</div>
+        <span>EmotionSense AI</span>
+    </div>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#features">Features</a>
+        <a href="#history">History</a>
+    </nav>
+
+    <div class="status">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="systemStatus">Checking API...</span>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="tag">✦ AI-Powered Emotion Recognition</div>
+
+    <h1>
+        Understand emotions with
+        <span class="gradient">Artificial Intelligence.</span>
+    </h1>
+
+    <p>
+        EmotionSense AI analyzes written text using a fine-tuned language
+        model and displays the predicted emotion scores. Enter a sentence
+        and see the model's response in real time.
+    </p>
+</section>
+
+<section class="dashboard" id="dashboard">
+
+    <div class="card">
+        <div class="card-title">
+            <h2>Text Emotion Detection</h2>
+            <span>Live Analysis</span>
+        </div>
+
+        <div class="input-panel">
+            <p>
+                Enter a sentence describing a feeling, experience, or situation.
+                The connected AI model will predict the emotion associated with
+                the text.
+            </p>
+
+            <label for="emotionText">Enter your text</label>
+
+            <textarea
+                id="emotionText"
+                maxlength="5000"
+                placeholder="For example: I am extremely happy that my hard work finally paid off!"
+            ></textarea>
+
+            <div class="actions">
+                <button class="primary-btn" id="analyzeBtn" type="button">
+                    Analyze Text
+                </button>
+
+                <button class="secondary-btn" id="clearBtn" type="button">
+                    Clear
+                </button>
+            </div>
+
+            <div id="requestStatus" role="status" aria-live="polite">
+                Enter text to begin. Connecting to the API...
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <h2>Current Analysis</h2>
+            <span>Model Result</span>
+        </div>
+
+        <div class="emotion-main">
+            <div class="emotion-face" id="mainFace">🧠</div>
+
+            <div class="detected-label">Dominant Emotion</div>
+
+            <div class="detected-emotion" id="mainEmotion">
+                Waiting
+            </div>
+
+            <div class="confidence" id="mainConfidence">
+                Submit text to view results
+            </div>
+        </div>
+
+        <div class="emotion-list">
+
+            <div class="emotion-row">
+                <label>Joy</label>
+                <div class="bar">
+                    <div class="fill" id="joyBar"></div>
+                </div>
+                <div class="percent" id="joyValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Neutral</label>
+                <div class="bar">
+                    <div class="fill" id="neutralBar"></div>
+                </div>
+                <div class="percent" id="neutralValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Sadness</label>
+                <div class="bar">
+                    <div class="fill" id="sadnessBar"></div>
+                </div>
+                <div class="percent" id="sadnessValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Anger</label>
+                <div class="bar">
+                    <div class="fill" id="angerBar"></div>
+                </div>
+                <div class="percent" id="angerValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Fear</label>
+                <div class="bar">
+                    <div class="fill" id="fearBar"></div>
+                </div>
+                <div class="percent" id="fearValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Surprise</label>
+                <div class="bar">
+                    <div class="fill" id="surpriseBar"></div>
+                </div>
+                <div class="percent" id="surpriseValue">—</div>
+            </div>
+
+            <div class="emotion-row">
+                <label>Disgust</label>
+                <div class="bar">
+                    <div class="fill" id="disgustBar"></div>
+                </div>
+                <div class="percent" id="disgustValue">—</div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+<section class="stats">
+    <div class="stat">
+        <div class="stat-top">
+            <span>Analyses this session</span>
+            <span class="stat-icon">🔍</span>
+        </div>
+        <div class="stat-number" id="analysisCount">0</div>
+        <div class="stat-change">Successful predictions in this session</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-top">
+            <span>Model</span>
+            <span class="stat-icon">🎯</span>
+        </div>
+        <div class="stat-number">RoBERTa</div>
+        <div class="stat-change">Fine-tuned text emotion classifier</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-top">
+            <span>Latest response</span>
+            <span class="stat-icon">⚡</span>
+        </div>
+        <div class="stat-number" id="responseTime">—</div>
+        <div class="stat-change">Measured browser request duration</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-top">
+            <span>Emotion groups</span>
+            <span class="stat-icon">🧠</span>
+        </div>
+        <div class="stat-number">7</div>
+        <div class="stat-change">Ekman-style summary categories</div>
+    </div>
+</section>
+
+<section class="section" id="features">
+    <div class="section-heading">
+        <h2>Features</h2>
+        <p>Capabilities of the current EmotionSense AI demonstration.</p>
+    </div>
+
+    <div class="features">
+        <div class="feature">
+            <div class="feature-icon">📝</div>
+            <h3>Text-Based Analysis</h3>
+            <p>
+                Submit written sentences to the connected FastAPI emotion
+                prediction endpoint.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">📊</div>
+            <h3>Emotion Visualization</h3>
+            <p>
+                View the dominant emotion, its model score, and the returned
+                emotion group scores.
+            </p>
+        </div>
+
+        <div class="feature">
+            <div class="feature-icon">🔗</div>
+            <h3>Backend Integration</h3>
+            <p>
+                Check backend health, handle API errors, and measure the
+                duration of successful requests.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section" id="history">
+    <div class="section-heading">
+        <h2>Recent Analysis History</h2>
+        <p>Recent successful predictions stored for this page session.</p>
+    </div>
+
+    <div class="card history">
+        <table>
+            <thead>
+                <tr>
+                    <th>Text</th>
+                    <th>Dominant Emotion</th>
+                    <th>Score</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+
+            <tbody id="historyBody">
+                <tr>
+                    <td colspan="4" style="color:var(--muted)">
+                        No predictions yet.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <span>© 2026 EmotionSense AI</span>
+        <span>AI predictions may not always reflect a person's actual feelings.</span>
+    </div>
+</footer>
+
+</div>
+
+<script>
+/*
+ IMPORTANT:
+ If your ngrok URL changes, update API_BASE below.
+ Keep the URL without a trailing slash.
+*/
+
+const API_BASE = "https://polyzoic-impotently-adrian.ngrok-free.dev";    
+const $ = (id) => document.getElementById(id);
+
+const EMOTIONS = {
+    joy: {
+        label: "Joy",
+        emoji: "😊"
+    },
+    neutral: {
+        label: "Neutral",
+        emoji: "😐"
+    },
+    sadness: {
+        label: "Sadness",
+        emoji: "😢"
+    },
+    anger: {
+        label: "Anger",
+        emoji: "😠"
+    },
+    fear: {
+        label: "Fear",
+        emoji: "😨"
+    },
+    surprise: {
+        label: "Surprise",
+        emoji: "😮"
+    },
+    disgust: {
+        label: "Disgust",
+        emoji: "🤢"
+    }
+};
+
+let analysisCount = 0;
+let historyItems = [];
+
+function setStatus(message, type = "") {
+    const status = $("requestStatus");
+    status.textContent = message;
+    status.className = type;
+}
+
+function normalizeLabel(label) {
+    const key = String(label || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[\s-]+/g, "_");
+
+    const aliases = {
+        happiness: "joy",
+        happy: "joy",
+        excited: "joy",
+        sad: "sadness",
+        angry: "anger",
+        mad: "anger",
+        fearful: "fear",
+        scared: "fear",
+        surprised: "surprise",
+        disgusted: "disgust",
+        calm: "neutral"
+    };
+
+    return aliases[key] || key;
+}
+
+function toPercent(score) {
+    let value = Number(score);
+
+    if (!Number.isFinite(value)) {
+        return 0;
+    }
+
+    // The API returns scores between 0 and 1.
+    value = Math.max(0, Math.min(1, value));
+
+    return value * 100;
+}
+
+function getEkmanScores(data) {
+    const raw = data && data.ekman &&
+        typeof data.ekman === "object"
+        ? data.ekman
+        : {};
+
+    const scores = {};
+
+    for (const [label, score] of Object.entries(raw)) {
+        const key = normalizeLabel(label);
+
+        if (Object.prototype.hasOwnProperty.call(EMOTIONS, key)) {
+            const value = Number(score);
+
+            if (Number.isFinite(value)) {
+                scores[key] = value;
+            }
+        }
+    }
+
+    return scores;
+}
+
+function getDominantEmotion(data, scores) {
+    if (data && data.ekman_top) {
+        const key = normalizeLabel(data.ekman_top);
+
+        if (EMOTIONS[key]) {
+            return {
+                key: key,
+                score: scores[key] ?? 0
+            };
+        }
+    }
+
+    const entries = Object.entries(scores);
+
+    if (entries.length === 0) {
+        throw new Error(
+            "The API response did not contain usable emotion scores."
+        );
+    }
+
+    entries.sort((a, b) => b[1] - a[1]);
+
+    return {
+        key: entries[0][0],
+        score: entries[0][1]
+    };
+}
+
+function renderScores(scores) {
+    for (const key of Object.keys(EMOTIONS)) {
+        const score = scores[key];
+        const bar = $(key + "Bar");
+        const value = $(key + "Value");
+
+        if (score === undefined) {
+            bar.style.width = "0%";
+            value.textContent = "—";
+            continue;
+        }
+
+        const percent = toPercent(score);
+
+        bar.style.width = percent.toFixed(1) + "%";
+        value.textContent = percent.toFixed(1) + "%";
+    }
+}
+
+function addHistory(textValue, emotionKey, score) {
+    historyItems.unshift({
+        text: textValue,
+        emotion: emotionKey,
+        score: score,
+        time: new Date().toLocaleTimeString()
+    });
+
+    historyItems = historyItems.slice(0, 8);
+
+    const body = $("historyBody");
+    body.replaceChildren();
+
+    for (const item of historyItems) {
+        const row = document.createElement("tr");
+
+        const textCell = document.createElement("td");
+        const emotionCell = document.createElement("td");
+        const scoreCell = document.createElement("td");
+        const timeCell = document.createElement("td");
+
+        textCell.textContent =
+            item.text.length > 90
+                ? item.text.slice(0, 87) + "..."
+                : item.text;
+
+        const badge = document.createElement("span");
+        badge.className = "emotion-badge";
+        badge.textContent =
+            EMOTIONS[item.emotion].emoji + " " +
+            EMOTIONS[item.emotion].label;
+
+        emotionCell.appendChild(badge);
+
+        scoreCell.textContent =
+            toPercent(item.score).toFixed(1) + "%";
+
+        timeCell.textContent = item.time;
+
+        row.append(
+            textCell,
+            emotionCell,
+            scoreCell,
+            timeCell
+        );
+
+        body.appendChild(row);
+    }
+}
+
+async function analyzeEmotionText(textValue) {
+    const text = String(textValue || "").trim();
+
+    if (!text) {
+        setStatus(
+            "Please enter a sentence before analyzing.",
+            "error"
+        );
+
+        $("emotionText").focus();
+        return;
+    }
+
+    const button = $("analyzeBtn");
+
+    button.disabled = true;
+    button.textContent = "Analyzing...";
+
+    setStatus("Sending your text to the emotion model...");
+
+    const startTime = performance.now();
+
+    try {
+        const response = await fetch(API_BASE + "/predict", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                "ngrok-skip-browser-warning": "true"
+            },
+
+            body: JSON.stringify({
+                text: text
+            })
+        });
+
+        const responseText = await response.text();
+
+        let data;
+
+        try {
+            data = JSON.parse(responseText);
+        } catch {
+            throw new Error(
+                "The backend did not return JSON. Check your ngrok URL " +
+                "and confirm that FastAPI is running."
+            );
+        }
+
+        if (!response.ok) {
+            const detail = data.detail || data.message;
+
+            throw new Error(
+                detail
+                    ? String(detail)
+                    : "API request failed with HTTP " + response.status
+            );
+        }
+
+        const scores = getEkmanScores(data);
+        const dominant = getDominantEmotion(data, scores);
+        const emotion = EMOTIONS[dominant.key];
+
+        renderScores(scores);
+
+        $("mainFace").textContent = emotion.emoji;
+        $("mainEmotion").textContent = emotion.label;
+
+        $("mainConfidence").textContent =
+            "Model score: " +
+            toPercent(dominant.score).toFixed(1) + "%";
+
+        const elapsed = Math.round(performance.now() - startTime);
+
+        $("responseTime").textContent = elapsed + " ms";
+
+        analysisCount += 1;
+        $("analysisCount").textContent = analysisCount;
+
+        addHistory(text, dominant.key, dominant.score);
+
+        setStatus(
+            "Analysis complete. Results received successfully from the model.",
+            "success"
+        );
+
+    } catch (error) {
+        console.error("Emotion analysis failed:", error);
+
+        setStatus(
+            "Could not analyze text. " +
+            (error.message || "Unknown error") +
+            " Check the API URL, backend status, and browser console.",
+            "error"
+        );
+
+    } finally {
+        button.disabled = false;
+        button.textContent = "Analyze Text";
+    }
+}
+
+async function checkApiHealth() {
+    try {
+        const response = await fetch(API_BASE + "/health", {
+            method: "GET",
+            headers: {
+                "ngrok-skip-browser-warning": "true"
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        if (data.status === "ok" || data.model_loaded === true) {
+            $("systemStatus").textContent = "API Connected";
+            $("statusDot").style.background = "var(--success)";
+            $("statusDot").style.boxShadow =
+                "0 0 12px var(--success)";
+
+            setStatus(
+                "Backend connected. Enter a sentence to begin.",
+                "success"
+            );
+        } else {
+            $("systemStatus").textContent = "API Responded";
+
+            setStatus(
+                "The API responded, but its health status needs checking.",
+                "error"
+            );
+        }
+
+    } catch (error) {
+        $("systemStatus").textContent = "API Unavailable";
+        $("statusDot").style.background = "var(--danger)";
+        $("statusDot").style.boxShadow =
+            "0 0 12px var(--danger)";
+
+        setStatus(
+            "Cannot reach the backend. Make sure FastAPI and ngrok are " +
+            "running and API_BASE contains your current ngrok URL.",
+            "error"
+        );
+    }
+}
+
+$("analyzeBtn").addEventListener("click", function () {
+    analyzeEmotionText($("emotionText").value);
+});
+
+$("clearBtn").addEventListener("click", function () {
+    $("emotionText").value = "";
+
+    setStatus("Text cleared. Enter a new sentence when ready.");
+
+    $("emotionText").focus();
+});
+
+$("emotionText").addEventListener("keydown", function (event) {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+        analyzeEmotionText($("emotionText").value);
+    }
+});
+
+checkApiHealth();
+</script>
+
+</body>
+</html>
